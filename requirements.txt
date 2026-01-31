@@ -1,0 +1,27 @@
+# Core framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+
+# Database + ORM
+SQLAlchemy==2.0.25
+aiomysql==0.2.0   # async MySQL driver
+alembic==1.13.1   # migrations
+
+# Validation
+pydantic==2.6.4
+email-validator==2.1.0.post1  # for email format validation
+
+# Testing
+pytest==8.0.0
+pytest-asyncio==0.23.5
+pytest-cov==4.1.0
+
+# Linting & Formatting
+ruff==0.3.0
+black==24.1.1
+
+# Security checks
+bandit==1.7.8
+
+# Utilities
+python-dotenv==1.0.1   # for environment variables
