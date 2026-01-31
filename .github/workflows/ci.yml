@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 name: Python CI
 
 on:
@@ -31,62 +30,3 @@ jobs:
       # Run tests
       - name: Run pytest
         run: pytest
-=======
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install dependencies
-        run: poetry install
-
-      - name: Run tests
-        run: poetry run pytest
-
-      - name: Security scan
-        run: poetry run bandit -r src -ll
-
-      - name: Dependency audit
-        run: poetry run pip-audit
-
-      - name: Build wheel
-        run: poetry build
-        run: pip install poetry
-
-      - name: Install dependencies
-        run: poetry install
-
-      - name: Run tests
-        run: poetry run pytest
-
-      - name: Security scan
-        run: poetry run bandit -r src -ll
-
-      - name: Dependency audit
-        run: poetry run pip-audit
-
-      - name: Build wheel
-        run: poetry build
->>>>>>> faa94268d74227d2b04b594dc562ead1ef9e26ee
