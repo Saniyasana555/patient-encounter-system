@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from src.database import SessionLocal
 from src.schemas.patient import PatientCreate, PatientRead
 from src.services.patient_service import create_patient, get_patient
-from src.models.patient import Patient  # <-- add this import
+from src.models.patient import Patient
 
 router = APIRouter()
 

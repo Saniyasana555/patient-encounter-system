@@ -3,6 +3,7 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from datetime import timedelta
+
 from src.database import Base
 
 
