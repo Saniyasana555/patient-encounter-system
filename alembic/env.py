@@ -4,7 +4,7 @@ from alembic import context
 from src.database import Base, DATABASE_URL
 import src.models.patient
 import src.models.doctor
-import src.models.appointment
+
 
 config = context.config
 fileConfig(config.config_file_name)
