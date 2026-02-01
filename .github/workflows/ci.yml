@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  test:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +26,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install ruff pylint pytest pytest-cov
 
-      # Run tests
-      - name: Run pytest
-        run: pytest
+      # Run Ruff (fast linting)
+      - name: Run Ruff
+        run: ruff check .
+
+      # Run Pylint (static analysis)
+      - name: Run Pylint
+        run: pylint src tests --exit-zero
+
+      # Run pytest with coverage
+      - name: Run pytest with coverage
+        run: pytest --cov=src --cov-report=term-missing
