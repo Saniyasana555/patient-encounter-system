@@ -19,8 +19,8 @@ class Appointment(Base):
     duration_minutes = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    patient = relationship("Patient", back_populates="appointments")
-    doctor = relationship("Doctor", back_populates="appointments")
+    patient = relationship("Patient")
+    doctor = relationship("Doctor")
 
     @property
     def end_time(self):

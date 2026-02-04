@@ -4,6 +4,8 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from sqlalchemy.orm import Session
 from pydantic import ValidationError
+from fastapi.testclient import TestClient
+from src.main import app
 
 from src.database import Base, engine, SessionLocal
 from src.schemas.patient import PatientCreate
@@ -14,6 +16,7 @@ from src.services.doctor_service import create_doctor, deactivate_doctor, get_do
 from src.services.appointment_service import create_appointment, list_appointments
 
 # pylint: disable=redefined-outer-name,unused-argument
+client = TestClient(app)
 
 
 @pytest.fixture(autouse=True)
@@ -104,25 +107,46 @@ def test_create_valid_appointment(db_session: Session, sample_patient, sample_do
     assert appt.duration_minutes == 30
 
 
-def test_conflict_appointment(db_session: Session, sample_patient, sample_doctor):
-    """Test appointment conflict detection."""
-    start_time = datetime.now(timezone.utc) + timedelta(hours=2)
-    appt1 = AppointmentCreate(
-        patient_id=sample_patient.id,
-        doctor_id=sample_doctor.id,
-        start_time=start_time,
-        duration_minutes=60,
-    )
-    create_appointment(db_session, appt1)
+def test_reject_overlapping_appointment():
+    patient = client.post(
+        "/patients",
+        json={
+            "first_name": "Charlie",
+            "last_name": "Day",
+            "email": "charlie@example.com",
+            "phone": "5551112222",
+        },
+    ).json()
+    doctor = client.post(
+        "/doctors",
+        json={
+            "full_name": "Dr. White",
+            "specialization": "Orthopedics",
+            "active": True,
+        },
+    ).json()
 
-    appt2 = AppointmentCreate(
-        patient_id=sample_patient.id,
-        doctor_id=sample_doctor.id,
-        start_time=start_time + timedelta(minutes=30),
-        duration_minutes=30,
+    start_time = (datetime.now(timezone.utc) + timedelta(hours=2)).isoformat()
+    client.post(
+        "/appointments",
+        json={
+            "patient_id": patient["id"],
+            "doctor_id": doctor["id"],
+            "start_time": start_time,
+            "duration_minutes": 60,
+        },
     )
-    with pytest.raises(Exception):
-        create_appointment(db_session, appt2)
+
+    resp = client.post(
+        "/appointments",
+        json={
+            "patient_id": patient["id"],
+            "doctor_id": doctor["id"],
+            "start_time": start_time,
+            "duration_minutes": 30,
+        },
+    )
+    assert resp.status_code == 409
 
 
 def test_invalid_duration(sample_patient, sample_doctor):

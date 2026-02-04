@@ -47,22 +47,22 @@ def create_appointment(db: Session, appt: AppointmentCreate) -> Appointment:
     return new_appt
 
 
-def list_appointments(
-    db: Session, date: datetime, doctor_id: int | None = None
-) -> list[Appointment]:
-    """List appointments for a given date, optionally filtered by doctor."""
+# def list_appointments(
+#     db: Session, date: datetime, doctor_id: int | None = None
+# ) -> list[Appointment]:
+#     """List appointments for a given date, optionally filtered by doctor."""
 
-    # Normalize date to UTC
-    date_utc = date.astimezone(timezone.utc)
-    day_start = date_utc.replace(hour=0, minute=0, second=0, microsecond=0)
-    day_end = date_utc.replace(hour=23, minute=59, second=59, microsecond=999999)
+#     # Normalize date to UTC
+#     date_utc = date.astimezone(timezone.utc)
+#     day_start = date_utc.replace(hour=0, minute=0, second=0, microsecond=0)
+#     day_end = date_utc.replace(hour=23, minute=59, second=59, microsecond=999999)
 
-    query = db.query(Appointment).filter(
-        Appointment.start_time >= day_start,
-        Appointment.start_time <= day_end,
-    )
+#     query = db.query(Appointment).filter(
+#         Appointment.start_time >= day_start,
+#         Appointment.start_time <= day_end,
+#     )
 
-    if doctor_id:
-        query = query.filter(Appointment.doctor_id == doctor_id)
+#     if doctor_id:
+#         query = query.filter(Appointment.doctor_id == doctor_id)
 
-    return query.all()
+#     return query.all()

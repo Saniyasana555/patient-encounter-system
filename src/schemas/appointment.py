@@ -39,4 +39,5 @@ class AppointmentRead(BaseModel):
     start_time: datetime
     duration_minutes: int
 
-    model_config = {"from_attributes": True}
+    class Config:
+        orm_mode = True
