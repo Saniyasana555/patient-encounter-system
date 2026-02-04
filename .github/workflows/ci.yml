@@ -1,69 +1,43 @@
-name: Python Production CI
+name: Python CI
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      PYTHONPATH: .
-      ENV: test
-      DATABASE_URL: mysql+pymysql://mongouhd_evernorth:U*dgQkKRuEHe@cp-15.webhostbox.net:3306/mongouhd_evernorth
-
     steps:
-      #  Checkout code
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      #  Setup Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-          cache: "pip"
 
-      #  Install Poetry
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          poetry --version
+      - name: Upgrade pip
+        run: pip install --upgrade pip
 
-      #  Configure Poetry
-      - name: Configure Poetry
-        run: |
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-
-      #  Install dependencies
       - name: Install dependencies
         run: |
-          poetry install --no-interaction --no-root
+          pip install -r requirements.txt
+          pip install ruff black bandit pytest pytest-cov pip-audit
 
-      #  Ruff linting
-      - name: Lint with Ruff
-        run: |
-          poetry run ruff check src tests
+      - name: Run linting with Ruff
+        run: ruff check src/
 
-      #  Black formatting check
-      - name: Check formatting with Black
-        run: |
-          poetry run black --check src tests
+      - name: Run formatting check with Black
+        run: black --check src/
 
-      #  Security scan
       - name: Security scan with Bandit
-        run: |
-          poetry run bandit -r src tests -ll
+        run: bandit -r src/ -ll
 
-      #  Run tests with coverage
-      - name: Run tests with coverage
-        run: |
-          poetry run pytest \
-            --cov=src \
-            --cov-report=term-missing \
-            --cov-fail-under=80
+      - name: Run unit tests with coverage
+        run: pytest --cov=src --cov-report=term-missing --cov-fail-under=80
+
+      - name: Dependency audit
+        run: pip-audit
