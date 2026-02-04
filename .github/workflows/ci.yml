@@ -8,6 +8,8 @@ on:
 
 jobs:
   build:
+  lint-and-test:
+
     runs-on: ubuntu-latest
 
     env:
@@ -43,6 +45,7 @@ jobs:
       # 5 Install dependencies
       - name: Install dependencies
         run: |
+
           poetry install --no-interaction --no-root
 
       # 6 Ruff linting
@@ -67,3 +70,4 @@ jobs:
             --cov=src \
             --cov-report=term-missing \
             --cov-fail-under=80
+
