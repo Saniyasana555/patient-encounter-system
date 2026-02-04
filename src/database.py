@@ -4,7 +4,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # Connection string to your MySQL database
-DATABASE_URL = "mysql+pymysql://mongouhd_evernorth:U*dgQkKRuEHe@cp-15.webhostbox.net:3306/mongouhd_evernorth"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env
+
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+
 
 # Create engine with connection health checks
 engine = create_engine(
@@ -16,9 +22,7 @@ engine = create_engine(
 )
 
 # Session factory
-SessionLocal = sessionmaker(
-    bind=engine, autocommit=False, autoflush=False
-)  # pylint: disable=invalid-name
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)  # pylint: disable=invalid-name
 
 # Base class for models
 Base = declarative_base()

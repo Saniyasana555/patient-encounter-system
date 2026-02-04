@@ -1,26 +1,40 @@
+import os
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
+from sqlalchemy import engine_from_config, pool
 from alembic import context
+from dotenv import load_dotenv
+from src.database import Base
+from src.models.patient import Patient
+from src.models.appointment import Appointment
+from src.models.doctor import Doctor
 
+# Load environment variables from .env file
+load_dotenv()
 
+# Alembic Config object
 config = context.config
 
-
+# If alembic.ini has logging config, set it up
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Import your models' metadata here if you want autogenerate support
+# Example:
+# from src.database import Base
+# target_metadata = Base.metadata
+# adjust path if needed
+target_metadata = Base.metadata
 
-target_metadata = None
+# Get DATABASE_URL from environment (fallback to SQLite)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -31,12 +45,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
-    """
+    """Run migrations in 'online' mode."""
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
