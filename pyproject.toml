@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "FastAPI backend for managing patients, appointments, and doctors"
 authors = ["Saniyasana555 <saniyasana687@gmail.com>"]
 readme = "README.md"
-[tool.poetry]
 packages = [{ include = "src" }]
 
 
