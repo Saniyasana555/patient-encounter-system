@@ -1,6 +1,6 @@
 """Service layer for appointment-related operations."""
 
-from datetime import timedelta, datetime, timezone
+from datetime import timedelta, timezone
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
