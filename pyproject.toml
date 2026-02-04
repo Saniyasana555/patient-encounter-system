@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "FastAPI backend for managing patients, appointments, and doctors"
 authors = ["Saniyasana555 <saniyasana687@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "patient_encounter_system", from = "src" }]
+[tool.poetry]
+packages = [{ include = "src" }]
+
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
@@ -29,16 +31,3 @@ httpx = ">=0.28.1,<0.29.0"
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-# Ruff configuration
-[tool.ruff]
-line-length = 88
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "B", "I"]
-ignore = ["E501"]  # ignore long line warnings if needed
-
-# Bandit configuration
-[tool.bandit]
-skips = ["B101"]  # example: skip assert usage warnings
