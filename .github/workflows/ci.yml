@@ -26,14 +26,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --with dev
 
       - name: Run Ruff (lint + format check)
         run: |
           poetry run ruff check src
 
       - name: Run formatting check with Black
-        run: poetry black --check src/
+        run: poetry run black --check src/
 
       - name: Run Bandit (security scan)
         run: |
