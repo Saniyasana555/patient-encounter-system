@@ -33,7 +33,7 @@ jobs:
           poetry run ruff check src
 
       - name: Run formatting check with Black
-        run: black --check src/
+        run: poetry black --check src/
 
       - name: Run Bandit (security scan)
         run: |
