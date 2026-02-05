@@ -35,8 +35,9 @@ def create_appointment(db: Session, appt: AppointmentCreate) -> Appointment:
         if existing.start_time and existing.duration_minutes:
             existing_start = existing.start_time.astimezone(timezone.utc)
             existing_end = existing.end_time.astimezone(timezone.utc)
+            overlap = existing_start < new_end and existing_end > appt_start_utc
 
-            if existing_start < new_end and existing_end > appt_start_utc:
+            if overlap:
                 raise HTTPException(status_code=409, detail="Appointment conflict")
 
     # Create and save the new appointment

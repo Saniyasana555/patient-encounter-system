@@ -22,7 +22,9 @@ engine = create_engine(
 )
 
 # Session factory
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)  # pylint: disable=invalid-name
+SessionLocal = sessionmaker(
+    bind=engine, autocommit=False, autoflush=False
+)  # pylint: disable=invalid-name
 
 # Base class for models
 Base = declarative_base()
